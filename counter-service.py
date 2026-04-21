@@ -32,23 +32,34 @@ def update_counter(counter):
 
 @app.route('/', methods=['GET', 'POST'])
 def handle_request():
-    """
-    Handles GET and POST requests to the root endpoint.
-    GET request returns the current count of POST requests.
-    POST request increments the counter and returns the updated count.
-    
-    Returns:
-        str: The response message with the current or updated counter.
-    """
     counter = read_counter()
     if request.method == 'POST':
-        # Increment the counter for each POST request and update the file.
         counter += 1
         update_counter(counter)
-        return f"POST requests counter updated. Current count: {counter}"
+        message = f"Count Updated!"
     else:
-        # For GET requests, just return the current count.
-        return f"Current POST requests count: {counter}"
+        message = f"Welcome to the Dashboard"
+
+    # This is "Template" HTML
+    return f"""
+    <html>
+        <head>
+            <style>
+                body {{ font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f4f4f9; }}
+                .card {{ background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; }}
+                h1 {{ color: #333; }}
+                .count {{ font-size: 48px; color: #007bff; font-weight: bold; }}
+            </style>
+        </head>
+        <body>
+            <div class="card">
+                <h1>{message}</h1>
+                <p>Total POST Requests:</p>
+                <div class="count">{counter}</div>
+            </div>
+        </body>
+    </html>
+    """
 
 @app.route('/health', methods=['GET'])
 def health_check():
